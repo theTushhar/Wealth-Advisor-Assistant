@@ -1,0 +1,62 @@
+{
+    "C-12345": {
+        "client_id": "C-12345",
+        "name": "John Smith",
+        "risk_tolerance": "moderate",
+        "investment_goals": ["Retirement", "Education fund"],
+        "accounts": [
+            {
+                "account_id": "ACC-001",
+                "type": "checking",
+                "balance": 25000.0,
+                "institution": "Chase Bank"
+            },
+            {
+                "account_id": "ACC-002",
+                "type": "savings",
+                "balance": 75000.0,
+                "institution": "Chase Bank"
+            },
+            {
+                "account_id": "ACC-003",
+                "type": "investment",
+                "balance": 250000.0,
+                "institution": "Fidelity"
+            },
+            {
+                "account_id": "ACC-004",
+                "type": "mortgage",
+                "balance": 350000.0,
+                "institution": "Bank of America"
+            }
+        ],
+        "transactions": [
+            {"transaction_id": "TXN-001", "date": "2026-05-01", "amount": 1500.0, "category": "groceries", "description": "Whole Foods", "location": "New York"},
+            {"transaction_id": "TXN-002", "date": "2026-05-02", "amount": 2500.0, "category": "utilities", "description": "Electric bill", "location": "New York"},
+            {"transaction_id": "TXN-003", "date": "2026-05-03", "amount": 15000.0, "category": "transfer", "description": "Large transfer to investment", "location": "New York"},
+            {"transaction_id": "TXN-004", "date": "2026-05-03", "amount": 800.0, "category": "dining", "description": "Restaurant", "location": "New York"},
+            {"transaction_id": "TXN-005", "date": "2026-05-03", "amount": 1200.0, "category": "shopping", "description": "Electronics", "location": "New York"},
+            {"transaction_id": "TXN-006", "date": "2026-05-03", "amount": 600.0, "category": "gas", "description": "Fuel", "location": "New York"},
+            {"transaction_id": "TXN-007", "date": "2026-05-03", "amount": 450.0, "category": "entertainment", "description": "Movie tickets", "location": "New York"},
+            {"transaction_id": "TXN-008", "date": "2026-05-04", "amount": 350.0, "category": "healthcare", "description": "Pharmacy", "location": "New York"},
+            {"transaction_id": "TXN-009", "date": "2026-05-05", "amount": 12000.0, "category": "transfer", "description": "Wire transfer overseas", "location": "Unknown"},
+            {"transaction_id": "TXN-010", "date": "2026-05-06", "amount": 200.0, "category": "subscription", "description": "Streaming services", "location": "New York"}
+        ]
+    },
+    "C-67890": {
+        "client_id": "C-67890",
+        "name": "Jane Doe",
+        "risk_tolerance": "aggressive",
+        "investment_goals": ["Early retirement", "Travel fund"],
+        "accounts": [
+            {"account_id": "ACC-101", "type": "checking", "balance": 15000.0, "institution": "Wells Fargo"},
+            {"account_id": "ACC-102", "type": "investment", "balance": 180000.0, "institution": "Robinhood"},
+            {"account_id": "ACC-103", "type": "crypto", "balance": 45000.0, "institution": "Coinbase"}
+        ],
+        "transactions": [
+            {"transaction_id": "TXN-101", "date": "2026-05-01", "amount": 500.0, "category": "groceries", "description": "Trader Joe's", "location": "Los Angeles"},
+            {"transaction_id": "TXN-102", "date": "2026-05-02", "amount": 8500.0, "category": "investment", "description": "Stock purchase", "location": "Los Angeles"},
+            {"transaction_id": "TXN-103", "date": "2026-05-03", "amount": 2200.0, "category": "rent", "description": "Monthly rent", "location": "Los Angeles"}
+        ]
+    }
+}
