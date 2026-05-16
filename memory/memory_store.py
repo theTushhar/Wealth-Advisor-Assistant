@@ -6,15 +6,9 @@ import logging
 from datetime import datetime
 import os
 
-logger = logging.getLogger(__name__)
+from utils.llm_client import generate_summary as llm_generate_summary, is_llm_available
 
-# Try to import LLM client - graceful fallback if not available
-try:
-    from utils.llm_client import generate_summary as llm_generate_summary
-    LLM_AVAILABLE = True
-except ImportError:
-    LLM_AVAILABLE = False
-    logger.warning("LLM client not available - using basic summaries")
+logger = logging.getLogger(__name__)
 
 
 class MemoryStore:
@@ -72,7 +66,7 @@ class MemoryStore:
 
     def _generate_llm_summary(self, client_id: str, analysis_result: Dict[str, Any]) -> Optional[str]:
         """Generate LLM summary for analysis result."""
-        if not LLM_AVAILABLE:
+        if not is_llm_available():
             # Fallback to basic summary
             return self._basic_summary(client_id, analysis_result)
 
@@ -132,7 +126,7 @@ class MemoryStore:
 
         context = "\n".join(context_parts)
 
-        if LLM_AVAILABLE:
+        if is_llm_available():
             try:
                 prompt = f"""
                 Summarize the current session context for a financial advisor workflow:

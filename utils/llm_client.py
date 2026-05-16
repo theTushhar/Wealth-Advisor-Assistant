@@ -11,6 +11,28 @@ logger = logging.getLogger(__name__)
 # Global LLM instance - lazily initialized
 _llm_instance: Optional[ChatOpenAI] = None
 
+# Cached LLM availability status
+_llm_available: Optional[bool] = None
+
+
+def is_llm_available() -> bool:
+    """
+    Check if LLM is available with caching.
+
+    Returns:
+        True if LLM can be initialized, False otherwise
+    """
+    global _llm_available
+
+    if _llm_available is None:
+        try:
+            get_llm()
+            _llm_available = True
+        except Exception:
+            _llm_available = False
+
+    return _llm_available
+
 
 def get_llm(temperature: float = 0.7) -> ChatOpenAI:
     """

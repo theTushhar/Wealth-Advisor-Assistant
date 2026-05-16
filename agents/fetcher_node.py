@@ -6,16 +6,10 @@ import logging
 import os
 
 from tools.crm_tool import fetch_crm_data
+from utils.state_utils import to_dict
+from utils.llm_client import validate_with_llm, is_llm_available
 
 logger = logging.getLogger(__name__)
-
-# Try to import LLM client - graceful fallback
-try:
-    from utils.llm_client import validate_with_llm
-    LLM_AVAILABLE = True
-except ImportError:
-    LLM_AVAILABLE = False
-    logger.warning("LLM client not available - skipping LLM validation")
 
 
 def load_client_financial_data(client_id: str) -> Dict[str, Any]:
@@ -66,7 +60,7 @@ def validate_data_completeness(financial_data: Dict[str, Any], crm_data: Dict[st
         issues.append("No CRM data available")
 
     # LLM validation if available
-    if LLM_AVAILABLE and financial_data and crm_data:
+    if is_llm_available() and financial_data and crm_data:
         try:
             validation_context = f"""
             Analyze this client data for completeness and potential issues:
@@ -107,11 +101,7 @@ def fetcher_node(state: Any) -> Dict[str, Any]:
     Data Fetcher Agent Node - Retrieves and prepares data from inputs/APIs.
     Uses LLM for data validation decisions when available.
     """
-    # Convert Pydantic model to dict if needed
-    if hasattr(state, 'model_dump'):
-        state = state.model_dump()
-    elif hasattr(state, 'dict'):
-        state = state.dict()
+    state = to_dict(state)
 
     client_id = state.get("client_id")
     logger.info(f"Fetcher node processing client: {client_id}")
@@ -156,7 +146,7 @@ def fetcher_node(state: Any) -> Dict[str, Any]:
         ]
 
         # LLM decision point: Flag if data needs attention
-        if LLM_AVAILABLE and validation_result.get("issues"):
+        if is_llm_available() and validation_result.get("issues"):
             try:
                 from utils.llm_client import generate_summary
                 decision_prompt = f"""

@@ -5,16 +5,10 @@ import logging
 
 from constants import RISK_PROFILES, SEVERITY_LEVELS
 from tools.anomaly_tool import detect_anomalies
+from utils.state_utils import to_dict
+from utils.llm_client import generate_recommendations_with_llm, is_llm_available
 
 logger = logging.getLogger(__name__)
-
-# Try to import LLM client - graceful fallback
-try:
-    from utils.llm_client import generate_recommendations_with_llm
-    LLM_AVAILABLE = True
-except ImportError:
-    LLM_AVAILABLE = False
-    logger.warning("LLM client not available - using rule-based recommendations only")
 
 
 def calculate_net_worth(accounts: List[Dict[str, Any]]) -> float:
@@ -94,11 +88,7 @@ def analyzer_node(state: Any) -> Dict[str, Any]:
     Analyzer Agent Node - Performs financial analysis with LLM enhancement.
     Combines rule-based analysis with LLM for enriched recommendations.
     """
-    # Convert Pydantic model to dict if needed
-    if hasattr(state, 'model_dump'):
-        state = state.model_dump()
-    elif hasattr(state, 'dict'):
-        state = state.dict()
+    state = to_dict(state)
 
     logger.info("Analyzer node processing")
 
@@ -141,7 +131,7 @@ def analyzer_node(state: Any) -> Dict[str, Any]:
 
         # LLM-enhanced recommendations
         llm_recommendations = []
-        if LLM_AVAILABLE:
+        if is_llm_available():
             try:
                 llm_recommendations = generate_recommendations_with_llm(
                     net_worth=net_worth,
@@ -171,8 +161,8 @@ def analyzer_node(state: Any) -> Dict[str, Any]:
             "recommendations": all_recommendations,
             "rule_recommendations": rule_recommendations,
             "llm_recommendations": llm_recommendations,
-            "confidence_score": 0.85 if not LLM_AVAILABLE else 0.92,
-            "llm_enhanced": LLM_AVAILABLE
+            "confidence_score": 0.85 if not is_llm_available() else 0.92,
+            "llm_enhanced": is_llm_available()
         }
 
         updated_state["analysis_result"] = analysis_result
@@ -192,7 +182,7 @@ def analyzer_node(state: Any) -> Dict[str, Any]:
         ]
 
         # Log LLM status
-        if LLM_AVAILABLE:
+        if is_llm_available():
             logger.info("Analysis enhanced with LLM recommendations")
         else:
             logger.info("Analysis using rule-based recommendations only")
